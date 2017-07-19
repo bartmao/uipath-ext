@@ -1,0 +1,51 @@
+﻿<sap:ActivityDesigner x:Class="ActivitiesEx.InvokeMethodExDesigner"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:atec="clr-namespace:System.Activities.Presentation.Converters;assembly=System.Activities.Presentation"
+    xmlns:sap="clr-namespace:System.Activities.Presentation;assembly=System.Activities.Presentation"
+    xmlns:sapv="clr-namespace:System.Activities.Presentation.View;assembly=System.Activities.Presentation"
+    Width="220" Loaded="ActivityDesigner_Loaded">
+    <sap:ActivityDesigner.Resources>
+        <ResourceDictionary x:Uid="ResourceDictionary_1">
+            <atec:ArgumentToExpressionConverter x:Key="ArgumentToExpressionConverter" x:Uid="sadc:ArgumentToExpressionConverter_1" />
+        </ResourceDictionary>
+    </sap:ActivityDesigner.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" Grid.Row="0" Name="btnSync" Click="btnSync_Click" FontSize="10">Load</Button>
+        <TextBlock x:Name="textBlock" Grid.Row="1" Grid.ColumnSpan="2"  HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Parameters:" VerticalAlignment="Top"/>
+        <ComboBox Grid.Row="0" Grid.Column="1" x:Name="comboBox"
+                  Width="170"
+                  ItemsSource="{Binding ModelItem.MyAssemblyInfo.Methods}"
+                  SelectedValue="{Binding ModelItem.SelectedMethodName, Mode=TwoWay}"
+                  SelectedValuePath="Name"
+                  DisplayMemberPath="Name" DropDownClosed="comboBox_DropDownClosed"/>
+        <ListBox x:Name="listBox" Grid.Row="2" Grid.ColumnSpan="2"
+                 ItemsSource="{Binding ModelItem.SelectedMethod.Parameters, Mode=OneWay}"
+                 Height="100" Width="200">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <sapv:ExpressionTextBox Name="exp" DockPanel.Dock="Left" 
+                                                HintText="{Binding Hint, Mode=OneWay}"
+                                                MaxLines="1" ExpressionType="{Binding RealType, Mode=OneWay}" 
+                                                Expression="{Binding Binding, Mode=TwoWay, ConverterParameter=In, Converter={StaticResource ArgumentToExpressionConverter}}"
+                                                OwnerActivity="{Binding ModelItem}"
+                                                Width="190">
+                        </sapv:ExpressionTextBox>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</sap:ActivityDesigner>

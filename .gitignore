@@ -1,0 +1,8 @@
+.vs
+bin/*
+!bin/AssemblyReader.exe
+!bin/AssemblyReader.pdb
+AssemblyReader/bin
+AssemblyReader/obj
+InvokeMethodEx/bin
+InvokeMethodEx/obj
