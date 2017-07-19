@@ -2,6 +2,8 @@
 bin/*
 !bin/AssemblyReader.exe
 !bin/AssemblyReader.pdb
+!bin/ActivitiesEx.dll
+!bin/ActivitiesEx.pdb
 AssemblyReader/bin
 AssemblyReader/obj
 InvokeMethodEx/bin
