@@ -4,11 +4,12 @@ using System.Collections.Generic;
 
 namespace InvokeMethodEx
 {
+    [Serializable]
     public class MyAssemblyInfo
     {
         public List<MyMethodInfo> Methods { get; set; }
     }
-
+    [Serializable]
     public class MyMethodInfo
     {
         public string Name { get; set; }
@@ -19,7 +20,7 @@ namespace InvokeMethodEx
 
         public MyTypeInfo ReturnValue { get; set; }
     }
-
+    [Serializable]
     public class MyParameterInfo
     {
         public string Name { get; set; }
@@ -39,7 +40,7 @@ namespace InvokeMethodEx
         }
         public InArgument Binding { get; set; }
     }
-
+    [Serializable]
     public class MyTypeInfo
     {
         public string TypeName { get; set; }

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AssemblyReader")]
+[assembly: AssemblyTitle("WorkflowTestConsole")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("PricewaterhouseCoopers LLP")]
-[assembly: AssemblyProduct("AssemblyReader")]
+[assembly: AssemblyProduct("WorkflowTestConsole")]
 [assembly: AssemblyCopyright("Copyright © PricewaterhouseCoopers LLP 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e672826d-9dc7-4122-aa75-ce4cf8f6de12")]
+[assembly: Guid("b5a55883-f572-445a-9245-7e42151b6061")]
 
 // Version information for an assembly consists of the following four values:
 //

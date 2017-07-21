@@ -5,7 +5,7 @@ bin/*
 !bin/ActivitiesEx.dll
 !bin/ActivitiesEx.pdb
 !bin/Bart.UiPathActivities.*.nupkg
-AssemblyReader/bin
-AssemblyReader/obj
+WorkflowTestConsole/bin
+WorkflowTestConsole/obj
 InvokeMethodEx/bin
 InvokeMethodEx/obj

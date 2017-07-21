@@ -1,12 +1,11 @@
 ﻿using InvokeMethodEx;
 using System;
 using System.Activities.Presentation;
-using System.Diagnostics;
 using System.IO;
-using System.Runtime.Serialization.Json;
-using System.Text;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
+using System.Linq;
 using MessageBox = System.Windows.MessageBox;
 
 namespace ActivitiesEx
@@ -30,6 +29,7 @@ namespace ActivitiesEx
 
         private void btnSync_Click(object sender, RoutedEventArgs e)
         {
+            //MessageBox.Show("waht");
             var dlg = new OpenFileDialog();
             dlg.Filter = "Assebmly File|*.dll|Executable File|*.exe";
             var rst = dlg.ShowDialog();
@@ -47,39 +47,33 @@ namespace ActivitiesEx
                 MessageBox.Show("Please specify Assembly File");
                 return;
             }
-            if (!File.Exists("c:\\windows\\AssemblyReader.exe"))
-            {
-                MessageBox.Show("Not found AssemblyReader under Windows folder");
-                return;
-            }
 
-            var psf = new ProcessStartInfo();
-            psf.FileName = @"c:\\windows\\AssemblyReader.exe";
-            psf.Arguments = ". \"" + vm.DesignTimeAssemblyFile + "\"";
-            psf.UseShellExecute = false;
-            psf.CreateNoWindow = true;
-            psf.WindowStyle = ProcessWindowStyle.Hidden;
-            psf.RedirectStandardOutput = true;
-            var p = Process.Start(psf);
-            var json = p.StandardOutput.ReadToEnd();
+            var domain = AppDomain.CreateDomain("readInfoDomain");
+            try
+            {
+                domain.SetData("Read_Env", ".");
+                domain.SetData("Read_DllPath", "\"" + vm.DesignTimeAssemblyFile + "\"");
+                // Load current assembly into the new domain
+                var pathToSelf = new Uri(GetType().Assembly.CodeBase).LocalPath;
+                domain.CreateInstanceFrom(pathToSelf, typeof(AssemblyLoadHelper).FullName);
 
-            if (string.IsNullOrEmpty(json))
-            {
-                MessageBox.Show(string.Format("Error on parsing the assembly {0}", vm.AssemblyFile));
-                return;
-            }
+                domain.DoCallBack(DomainProxy.DoCallback);
+                var assemblyInfo = domain.GetData("Assembly_Info") as MyAssemblyInfo;
+                if (assemblyInfo == null)
+                {
+                    MessageBox.Show(string.Format("Error on parsing the assembly {0}", vm.AssemblyFile));
+                    return;
+                }
 
-            MyAssemblyInfo assemblyInfo = null;
-            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(json)))
-            {
-                var serializer = new DataContractJsonSerializer(typeof(MyAssemblyInfo));
-                assemblyInfo = serializer.ReadObject(stream) as MyAssemblyInfo;
+                vm.MyAssemblyInfo = assemblyInfo;
+                if (comboBox.Items.Count > 0)
+                {
+                    comboBox.SelectedIndex = 0;
+                    RefreshParameters();
+                }
             }
-            vm.MyAssemblyInfo = assemblyInfo;
-            if (comboBox.Items.Count > 0)
-            {
-                comboBox.SelectedIndex = 0;
-                RefreshParameters();
+            finally {
+                AppDomain.Unload(domain);
             }
         }
 
@@ -92,6 +86,24 @@ namespace ActivitiesEx
                 {
                     vm.SelectedMethod = m;
                     break;
+                }
+            }
+        }
+
+        private class DomainProxy : MarshalByRefObject
+        {
+            public static void DoCallback()
+            {
+                try
+                {
+                    var curDomain = AppDomain.CurrentDomain;
+                    var reader = new AssemblyReader(curDomain.GetData("Read_Env").ToString(), curDomain.GetData("Read_DllPath").ToString());
+                    var info = reader.Parse();
+                    curDomain.SetData("Assembly_Info", info);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
                 }
             }
         }

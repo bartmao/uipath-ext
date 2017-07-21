@@ -13,7 +13,6 @@ namespace ActivitiesEx
         public void Register()
         {
             var attributeTableBuilder = new AttributeTableBuilder();
-            // Category attribute not working in UIPath, not known yet
             attributeTableBuilder.AddCustomAttributes(typeof(InvokeMethodEx), new Attribute[]
             {
                 new CategoryAttribute("Bart.Infrastructure")

@@ -41,7 +41,6 @@
     <Reference Include="System.Activities.Presentation" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
@@ -49,6 +48,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyLoadHelper.cs" />
+    <Compile Include="AssemblyReader.cs" />
     <Compile Include="MyRegister.cs" />
     <Page Include="InvokeMethodExDesigner.xaml">
       <Generator>MSBuild:Compile</Generator>
